@@ -1,0 +1,239 @@
+﻿@model List<Item>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="popup-out" id="popup-post">
+    <div class="popup-post">
+        <form asp-controller="Home" asp-action="Create" method="post" class="form">
+            <h2>คุณอยากกินอะไร?</h2>
+            <div class="form-element">
+                <label for="Name">ชื่อของคุณ</label>
+                <input type="text" id="Name" name="Name" placeholder="ชื่อของคุณ" />
+
+                <label for="CefetariaSelect">เลือกโรงอาหาร</label>
+                <select id="CefetariaSelect" onchange="changeFoodItems()" name="Cafetaria">
+                    <option value="">- เลือกโรงอาหาร -</option>
+                    <option value="โรงอาหารพระเทพ">โรงอาหารพระเทพ</option>
+                    <option value="โรงอาหาร A">โรงอาหาร A</option>
+                    <option value="โรงอาหาร C">โรงอาหาร C</option>
+                    <option value="โรงอาหาร J">โรงอาหาร J</option>
+                </select>
+
+                <label for="StoreSelect">เลือกร้านอาหาร</label>
+                <select id="StoreSelect" name="StoreName" onchange="changeFoodName()">
+                    <option value=""></option>
+                </select>
+
+                <label for="FoodSelect">เลือกเมนู</label>
+                <select id="FoodSelect" name="FoodSelect">
+                    <option value=""></option>
+                </select>
+
+                <label for="Address">ที่อยู่</label>
+                <input type="text" id="Address" name="Address" placeholder="ที่อยู่" />
+                <label for="Tel">เบอร์โทร</label>
+                <input type="text" id="Tel" name="Tel" placeholder="เบอร์โทร" />
+            </div>
+            <div class="form-element">
+                <button type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="popup-out" id="popup-order">
+    <div class="conf-ordert">
+        <div class="form-order">
+            <h2>คุณต้องการยืนยัน Order นี้หรือไม่</h2>
+        </div>
+        <div class="btn-con-order">
+            <button class="btn-conf" onclick="confirm_order()">ยืนยัน Order</button>
+            <button class="btn-no" onclick="close_popup()">รอรับ Order</button>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="grid-container">
+    <div class="item2">
+        <div class="right-title">
+            <p class="txt-subtitle">ถ้าคุณหิวแต่ขี้เกียจลงไปซื้ออาหาร ลองโพสบอกให้คนอื่นๆดูสิ</p>
+            <p class="txt-subtitle">อาจจะมีคนอยู่ใกล้ร้านอาหารที่คุณต้องการก็ได้</p>
+            <div class="login">
+                <button class="btn-login" onclick="post_popup()">คุณอยากกินอะไร</button>
+            </div>
+            <div class="login">
+                <button class="btn-login" onclick="show_menu()" id="btn-show-menu">แสดงเมนูแนะนำ</button>
+                <button class="btn-login" onclick="close_menu()" id="btn-close-menu">ปิดเมนูแนะนำ</button>
+            </div>
+        </div>
+
+        <div class="menu" id="show-menu">
+            <p class="menu-title">
+                เมนูแนะนำ
+            </p>
+            <p class="name-menu">โรงอาหารพระเทพ :</p>
+            <ul>
+                <li>ข้าวหมูทงคัตสึไข่ข้น</li>
+                <li>ผัดใบเหลียง-ไข่เจียว</li>
+                <li>เส้นเล็กหมูน้ำตก</li>
+            </ul>
+            <p class="name-menu">โรงอาหาร A :</p>
+            <ul>
+                <li>ข้าวหมูแดง-หมูกรอบ</li>
+                <li>ข้าวไข่ข้นลาวา</li>
+                <li>ทงคัตสึราเมน</li>
+            </ul>
+            <p class="name-menu">โรงอาหาร C :</p>
+            <ul>
+                <li>ข้าวหมึกผัดผงกะหรี่</li>
+                <li>ข้าวมันไก่ทริปเปิ้ล</li>
+                <li>ข้าวขาหมู-พิเศษ</li>
+            </ul>
+            <p class="name-menu">โรงอาหาร J :</p>
+            <ul>
+                <li>จัมโบ้หมูตุ๋น</li>
+                <li>ข้าวผัดปู</li>
+                <li>ข้าวหนวดหมึกกระเทียม</li>
+            </ul>
+        </div>
+    </div>
+    <div class="item1">
+
+        @if (Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+
+                <div class="blog-post" id="post-success">
+                    <div class="topic">
+                        <p class="post-name">Name: @item.Name</p>
+                        <p class="post-order">โรงอาหาร: @item.Cafetaria</p>
+                        <p class="post-order">ร้าน: @item.StoreName</p>
+                        <p class="post-order">ชื่ออาหาร: @item.FoodSelect</p>
+                        <p class="post-tel">ที่อยู่: @item.Address</p>
+                        <p class="post-location">เบอร์โทร: @item.Tel</p>
+                    </div>
+                    <div class="status">
+                        @if (item.IsOrderConfirmed == true)
+                        {
+                            <button class="show-status-s" style="display:block;" id="s">ยืนยันแล้ว</button>
+                        }
+                        else
+                        {
+                            <form asp-controller="Home" asp-action="ConfirmOrder" method="post" class="form">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="show-status">ยืนยัน Order</button>
+                            </form>
+                        }
+                        <form asp-controller="Home" asp-action="DeleteItem" method="post" class="form">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn-delete">ลบ</button>
+                        </form>
+                    </div>
+
+                    <!-- ในแต่ละรายการเพิ่มฟอร์มสำหรับยืนยัน Order -->
+                    
+
+                </div>
+
+            }
+
+        }
+        else
+        {
+            <div class="blog-post" id="post-success">
+                <p>No orders yet.</p>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<script>
+    function changeFoodItems() {
+        var CefetariaSelect = document.getElementById("CefetariaSelect");
+        var StoreSelect = document.getElementById("StoreSelect");
+
+        var selectedRestaurant = CefetariaSelect.value;
+
+        // เคลียร์รายการร้านอาหารที่มีอยู่
+        while (StoreSelect.options.length > 0) {
+            StoreSelect.remove(0);
+        }
+
+        // เพิ่มรายการร้านอาหารตามร้านอาหารที่เลือก
+        if (selectedRestaurant === "- เลือกโรงอาหาร -") {
+            var foodItems = [""];
+        } else if (selectedRestaurant === "โรงอาหารพระเทพ") {
+            var foodItems = ["- เลือกร้านอาหาร -", "เทคโนอินเตอร์", "ข้าวแกงพระเทพ", "เตี๋ยวเรือพระเทพ"];
+        } else if (selectedRestaurant === "โรงอาหาร A") {
+            var foodItems = ["- เลือกร้านอาหาร -", "สุดยอดหมูแดง-หมูกรอบ", "ไข่ข้นล้นช้อน", "ที่นี่ญี่ปุ่น"];
+        } else if (selectedRestaurant === "โรงอาหาร C") {
+            var foodItems = ["- เลือกร้านอาหาร -", "อิ่มอ้วกแตก", "ทริปเปิ้ลมันไก่", "ขาหมูไทย ไม่ใช่เยอรมัน"];
+        } else if (selectedRestaurant === "โรงอาหาร J") {
+            var foodItems = ["- เลือกร้านอาหาร -", "เตี๋ยวสุดยอดหมูตุ๋น", "ตามสั่งชงโค", "ร้านนี้สายปั่น"];
+        }
+
+        for (var i = 0; i < foodItems.length; i++) {
+            var option = document.createElement("option");
+            option.text = foodItems[i];
+            option.value = foodItems[i];
+            StoreSelect.add(option);
+        }
+    }
+    function changeFoodName() {
+        var StoreSelect = document.getElementById("StoreSelect");
+        var FoodSelect = document.getElementById("FoodSelect");
+
+        var selectedStore = StoreSelect.value;
+
+        // เคลียร์รายการอาหารที่มีอยู่
+        while (FoodSelect.options.length > 0) {
+            FoodSelect.remove(0);
+        }
+
+        // เพิ่มรายการอาหารตามร้านอาหารที่เลือก
+        if (selectedStore === "") {
+            var foodMenu = [""];
+        } else if (selectedStore === "เทคโนอินเตอร์") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวหมูทงคัตสึไข่ข้น", "ข้าวแกงกะหรี่ไข่ข้น", "สปาเก็ตตี้คาโบนาร่า", "สปาเก็ตตี้เบค่อนผัดพริกแห้ง", "สเต็กไก่สไปซี่", "ข้าวไก่คาราอาเกะ"];
+        } else if (selectedStore === "ข้าวแกงพระเทพ") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวไข่พะโล้-ไข่เจียว", "ข้าวหมูหวานไก่ทอด-ไข่ดาว", "ผัดใบเหลียง-ไข่เจียว", "ข้าวกะเพราหมูสับ-ไข่ดาว"];
+        } else if (selectedStore === "เตี๋ยวเรือพระเทพ") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "เส้นเล็กหมูน้ำตก", "บะหมี่หมูน้ำตก", "เส้นหมี่หมูน้ำตก"];
+        } else if (selectedStore === "สุดยอดหมูแดง-หมูกรอบ") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวหมูกรอบ", "ข้าวหมูแดง", "ข้าวหมูแดง-หมูกรอบ", "บะหมี่หมูแดง", "บะหมี่หมูกรอบ", "บะหมี่หมูแดง-หมูกรอบ"];
+        } else if (selectedStore === "ไข่ข้นล้นช้อน") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวไข่ข้น", "ข้าวไข่ข้นกุ้ง", "ข้าวไข่ข้นเบค่อน", "ข้าวไข่ข้นลาวา"];
+        } else if (selectedStore === "ที่นี่ญี่ปุ่น") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ทงคัตสึราเมน", "ข้าวหน้าปลาซาบะ", "ข้าวเนื้อยากินิกุ", "ข้าวหน้าไก่เทอริยากิ", "ซารุราเมน"];
+        } else if (selectedStore === "อิ่มอ้วกแตก") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวผัดหมู", "กะเพราหมูสับ", "คะน้าหมูกรอบ", "ข้าวไข่เจียว", "ข้าวไก่กระเทียม", "ข้าวหมึกผัดผงกะหรี่"];
+        } else if (selectedStore === "ทริปเปิ้ลมันไก่") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวมันไก่ต้ม", "ข้าวมันไก่ทอด", "ข้าวมันไก่ย่าง", "ข้าวมันไก่ทริปเปิ้ล"];
+        } else if (selectedStore === "ขาหมูไทย ไม่ใช่เยอรมัน") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวขาหมู", "ข้าวขาหมู-พิเศษ", "ข้าวคากิ(หนังหมูล้วน)"];
+        } else if (selectedStore === "เตี๋ยวสุดยอดหมูตุ๋น") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "หมูตุ๋นธรรมดา", "หมูตุ๋นพิเศษ", "จัมโบ้หมูตุ๋น"];
+        } else if (selectedStore === "ตามสั่งชงโค") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ข้าวผัดปู", "ข้าวกะเพราทะเล-ไข่ดาว", "ข้าวหมูผัดน้ำมันหอย", "ข้าวหนวดหมึกกระเทียม"];
+        } else if (selectedStore === "ร้านนี้สายปั่น") {
+            var foodMenu = ["- เลือกเมนูอาหาร -", "ไมโลปั่น", "องุ่นปั่น", "สตรอว์เบอร์รี่ปั่น", "นมกล้วนปั่น", "โอริโอ้ปั่น"];
+        }
+
+        for (var i = 0; i < foodMenu.length; i++) {
+            var optionMenu = document.createElement("option");
+            optionMenu.text = foodMenu[i];
+            optionMenu.value = foodMenu[i];
+            FoodSelect.add(optionMenu);
+        }
+    }
+</script>
+
+

@@ -1,0 +1,7 @@
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/webapp_project
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/appsettings.Development.json
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/appsettings.json
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/webapp_project.dll
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/webapp_project.deps.json
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/webapp_project.runtimeconfig.json
+/Users/dunk/Desktop/web app/Project_webapp/webapp_pro/webapp_project.pdb
